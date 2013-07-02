@@ -1,0 +1,60 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="main.js" async type="text/javascript" ></script>
+</head>
+<body>
+  <style>
+    #grid {
+        background-color: #888888;
+        z-index: 0;
+    }
+
+    #content {
+        z-index: 1;
+        position: fixed;
+        left: 50px;
+        top: 100px;
+        background-color: #aa3333;
+        width: 300px;
+        height: 300px;
+    }
+
+    #menu {
+        position: fixed;
+        right: 10px;
+        top: 10px;
+        padding: 20px;
+        background-color: #555555;
+        width: 300px;
+    }
+
+    body
+    {
+        padding: 0;
+        margin: 0;
+    }
+  </style>
+
+  <canvas id="grid"></canvas>
+
+  <div id="menu">
+    <div id="tx"></div>
+    <div id="ty"></div>
+    <div id="tz"></div>
+    <p>
+    <div id="sx"></div>
+    <div id="sy"></div>
+    <div id="sz"></div>
+    <p>
+    <div id="rx"></div>
+    <div id="ry"></div>
+    <div id="rz"></div>
+  </div>
+
+  <div id="content">Hello World!</div>
+
+</body>
+</html>
