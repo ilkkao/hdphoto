@@ -1,70 +1,69 @@
 
-$(document).ready(function () {
-    var w = document.body.clientWidth;
-    var h = document.body.clientHeight;
+var ImagePuzzle = function() {
+    this.ctx = $('#grid')[0].getContext("2d");
+};
 
-    $('#grid').width(w).height(h);
-    $('#grid').attr('width', w);
-    $('#grid').attr('height', h);
+ImagePuzzle.prototype.drawLine = function (x, y, n, m, w) {
+    this.ctx.lineWidth = w;
+    this.ctx.strokeStyle = '#dddddd';
 
-    ctx = $('#grid')[0].getContext("2d");
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    this.ctx.lineTo(n, m);
+    this.ctx.stroke();
+};
 
-    ctx.strokeStyle = '#dddddd';
-    var spacing = 20;
+ImagePuzzle.prototype.drawGrid = function () {
 
-    function drawLine(x, y, n, m, w) {
-        ctx.lineWidth = w;
+    //Configure canvas
+    $('#grid').width(this.w).height(this.h);
+    $('#grid').attr('width', this.w).attr('height', this.h);
 
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(n, m);
-        ctx.stroke();
-    }
+    var spacing = 20 + ((this.w % 100 ) / Math.floor(this.w / 20));
+    console.log("Spacing is: ", spacing);
 
     var width;
+    var n = 0;
 
-    for (var i = 0; i < h; i += spacing) {
-        width = (i % (spacing * 5)) ? 0.3 : 1;
-        drawLine(0, i, w, i, width);
+    for (var i = 0; i < this.h; i += spacing) {
+        this.drawLine(0, i, this.w, i, n % 5 ? 0.3 : 1);
+        n++;
     }
 
-    for (var i = 0; i < w; i += spacing) {
-        width = (i % (spacing * 5)) ? 0.3 : 1;
-        drawLine(i, 0, i, h, width);
+    n = 0;
+
+    for (var i = 0; i < this.w; i += spacing) {
+        this.drawLine(i, 0, i, this.h, n % 5 ? 0.3 : 1);
+        n++;
     }
+};
 
-    //Menu
-    $('#tx').slider();
-    $('#ty').slider();
-    $('#tz').slider();
+ImagePuzzle.prototype.drawPiece = function () {
+    var imageObj = new Image();
+    var that = this;
 
-    $('#sx').slider();
-    $('#sy').slider();
-    $('#sz').slider();
+    imageObj.onload = function() {
+        that.ctx.drawImage(imageObj, 0, 0, that.w, that.h);
+    };
 
-    $('#rx').slider();
-    $('#ry').slider();
-    $('#rz').slider();
+    imageObj.src = 'images/bg1.jpg';
+};
 
-    var matrix = [
-        [1,0,0,0],
-        [0,1,0,0],
-        [0,0,1,0],
-        [0,0,0,1]
-    ];
+ImagePuzzle.prototype.onResize = function () {
+    this.w = $(window).width();
+    this.h = $(window).height();
 
-    var s = "matrix3d(";
-    s += tM.e(1,1).toFixed(10) + "," + tM.e(1,2).toFixed(10) + "," +
-        tM.e(1,3).toFixed(10) + "," + tM.e(1,4).toFixed(10) + ",";
-    s += tM.e(2,1).toFixed(10) + "," + tM.e(2,2).toFixed(10) + "," +
-        tM.e(2,3).toFixed(10) + "," + tM.e(2,4).toFixed(10) + ",";
-    s += tM.e(3,1).toFixed(10) + "," + tM.e(3,2).toFixed(10) + "," +
-        tM.e(3,3).toFixed(10) + "," + tM.e(3,4).toFixed(10) + ",";
-    s += tM.e(4,1).toFixed(10) + "," + tM.e(4,2).toFixed(10) + "," +
-        tM.e(4,3).toFixed(10) + "," + tM.e(4,4).toFixed(10);
-    s += ")";
+    engine.drawGrid();
+}
 
-document.getElementById('darth-vader').style['-webkit-transform'] = s
+var engine = new ImagePuzzle();
 
+$(document).ready(function () {
+    engine.onResize();
+    engine.drawPiece();
+});
 
+$(window).resize(function() {
+    engine.onResize();
+    engine.drawPiece();
 });
