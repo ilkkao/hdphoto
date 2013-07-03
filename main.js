@@ -29,6 +29,7 @@ ImagePuzzle.prototype.drawGrid = function () {
         this.drawLine(0, i, this.w, i, n % 5 ? 0.3 : 1);
         n++;
     }
+    this.tilesX = n / 5;
 
     n = 0;
 
@@ -36,17 +37,35 @@ ImagePuzzle.prototype.drawGrid = function () {
         this.drawLine(i, 0, i, this.h, n % 5 ? 0.3 : 1);
         n++;
     }
+    this.tilesY = n / 5;
+    console.log("Tiles: " + this.tilesX + " x " + this.tilesY);
 };
 
 ImagePuzzle.prototype.drawPiece = function () {
-    var imageObj = new Image();
-    var that = this;
+    var delay = 0;
 
-    imageObj.onload = function() {
-        that.ctx.drawImage(imageObj, 0, 0, that.w, that.h);
-    };
+    for (var y = 0; y < this.h; y += 100) {
+        for (var x = 0; x < this.w; x += 100) {
+            var image = new Image();
+            image.style.clip = "rect(" + y + "px " + (x + 100) + "px " +
+                (y + 100) + "px " + x + "px)";
+            image.style.position = "absolute";
+            image.style.top = "0px"; //y + "px";
+            image.style.left = "0px"; //x + "px";
 
-    imageObj.src = 'images/bg1.jpg';
+            delay += 100;
+
+            image.onload = function(i, d) {
+                return function() {
+                    setTimeout(function() {
+                        document.body.appendChild(i);
+                    }, d);
+                };
+            }(image, delay);
+
+            image.src = 'images/bg1.jpg';
+        }
+    }
 };
 
 ImagePuzzle.prototype.onResize = function () {
