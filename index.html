@@ -1,34 +1,13 @@
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-  <script src="main.js" async type="text/javascript" ></script>
-</head>
-<body>
+  <script src="split.js" type="text/javascript" ></script>
+  <script src="main.js" type="text/javascript" ></script>
+
   <style>
     #grid {
         background-color: #888888;
         z-index: 0;
-    }
-
-    #content {
-        z-index: 1;
-        position: fixed;
-        left: 50px;
-        top: 100px;
-        background-color: #aa3333;
-        width: 300px;
-        height: 300px;
-    }
-
-    #menu {
-        position: fixed;
-        right: 10px;
-        top: 10px;
-        padding: 20px;
-        background-color: #555555;
-        width: 300px;
     }
 
     body
@@ -41,7 +20,10 @@
         overflow: hidden;
     }
   </style>
+</head>
 
+<body>
   <canvas id="grid"></canvas>
 </body>
+
 </html>
