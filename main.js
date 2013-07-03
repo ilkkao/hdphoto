@@ -1,6 +1,6 @@
 
 var ImagePuzzle = function() {
-    this.ctx = $('#grid')[0].getContext("2d");
+    this.ctx = $('#grid')[0].getContext('2d');
 };
 
 ImagePuzzle.prototype.drawLine = function (x, y, n, m, w) {
@@ -19,50 +19,45 @@ ImagePuzzle.prototype.drawGrid = function () {
     $('#grid').width(this.w).height(this.h);
     $('#grid').attr('width', this.w).attr('height', this.h);
 
-    var spacing = 20 + ((this.w % 100 ) / Math.floor(this.w / 20));
-    console.log("Spacing is: ", spacing);
-
-    var width;
-    var n = 0;
+    var spacing = 20; // + ((this.w % 100 ) / Math.floor(this.w / 20));
+    console.log('Spacing is: ', spacing);
 
     for (var i = 0; i < this.h; i += spacing) {
-        this.drawLine(0, i, this.w, i, n % 5 ? 0.3 : 1);
-        n++;
+        this.drawLine(0, i, this.w, i, i % 100 ? 0.3 : 1);
     }
-    this.tilesX = n / 5;
 
-    n = 0;
-
-    for (var i = 0; i < this.w; i += spacing) {
-        this.drawLine(i, 0, i, this.h, n % 5 ? 0.3 : 1);
-        n++;
+    for (i = 0; i < this.w; i += spacing) {
+        this.drawLine(i, 0, i, this.h, i % 100 ? 0.3 : 1);
     }
-    this.tilesY = n / 5;
-    console.log("Tiles: " + this.tilesX + " x " + this.tilesY);
 };
 
-ImagePuzzle.prototype.drawPiece = function () {
-    var delay = 0;
+ImagePuzzle.prototype.drawPieces = function () {
+    var imgId = 0;
 
     for (var y = 0; y < this.h; y += 100) {
         for (var x = 0; x < this.w; x += 100) {
             var image = new Image();
-            image.style.clip = "rect(" + y + "px " + (x + 100) + "px " +
-                (y + 100) + "px " + x + "px)";
-            image.style.position = "absolute";
-            image.style.top = "0px"; //y + "px";
-            image.style.left = "0px"; //x + "px";
+            image.style.clip = 'rect(' + y + 'px ' + (x + 100) + 'px ' +
+                (y + 100) + 'px ' + x + 'px)';
+            image.style.position = 'absolute';
+            image.style.top = '0px';
+            image.style.left = '0px';
+            image.style.display = 'none';
+            image.id = imgId;
 
-            delay += 100;
+            image.style.minHeight = '100%';
+            image.style.minWidth = '100%';
 
-            image.onload = function(i, d) {
+            image.onload = function(i, id) {
                 return function() {
                     setTimeout(function() {
                         document.body.appendChild(i);
-                    }, d);
+                        $('#' + id).fadeIn(1000);
+                    }, Math.floor(Math.random() * 15000));
                 };
-            }(image, delay);
+            }(image, imgId);
 
+            imgId++;
             image.src = 'images/bg1.jpg';
         }
     }
@@ -79,10 +74,10 @@ var engine = new ImagePuzzle();
 
 $(document).ready(function () {
     engine.onResize();
-    engine.drawPiece();
+    engine.drawPieces();
 });
 
 $(window).resize(function() {
     engine.onResize();
-    engine.drawPiece();
+    engine.drawPieces();
 });
