@@ -1,4 +1,4 @@
-canvas-test
-===========
+img-splitter.js
+===============
 
-canvas-test
+A simple jQuery based library for splitting images to parts.
