@@ -36,9 +36,7 @@
         }
     };
 
-    ImgSplitter.prototype.drawPieces = function () {
-        var imgId = 0;
-
+    ImgSplitter.prototype.split = function (callback) {
         for (var y = 0; y < this.h; y += 100) {
             for (var x = 0; x < this.w; x += 100) {
                 var image = new Image();
@@ -48,21 +46,11 @@
                 image.style.top = '0px';
                 image.style.left = '0px';
                 image.style.display = 'none';
-                image.id = imgId;
 
                 image.style.minHeight = '100%';
                 image.style.minWidth = '100%';
 
-                image.onload = function(i, id) {
-                    return function() {
-                        setTimeout(function() {
-                            document.body.appendChild(i);
-                            $('#' + id).fadeIn(1000);
-                        }, Math.floor(Math.random() * 15000));
-                    };
-                }(image, imgId);
-
-                imgId++;
+                image.onload = callback(image, x, y);
                 image.src = this.imgUrl;
             }
         }
