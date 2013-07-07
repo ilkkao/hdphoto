@@ -1,6 +1,4 @@
-img-splitter.js
-===============
+Full-screen image viewer
+========================
 
-A simple jQuery based library for splitting images to parts.
-
-See `example.html` and `example.js` for usage.
+Work in early stages.
