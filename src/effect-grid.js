@@ -1,5 +1,7 @@
 (function () {
-    var delay = 0;
+    var delay = 0,
+        tiles = -1,
+        callback = null;
 
     function drawPieces(img, x, y) {
         setTimeout(function() {
@@ -33,8 +35,16 @@
                 'left': '+=' + dx + 'px',
                 'top': '+=' + dy + 'px'
             }, {
-            duration: 2000,
-            easing: 'swing'});
+                duration: 2000,
+                easing: 'swing',
+                complete: function() {
+                    console.log(tiles);
+
+                    if (--tiles == 0) {
+                        callback();
+                    }
+                }
+            });
         }, delay);
 
         delay += 10;
@@ -45,7 +55,10 @@
         this.h = $(window).height();
     };
 
-    GridEffect.prototype.load = function (url, callback) {
+    GridEffect.prototype.load = function (url, cb) {
+        tiles = Math.floor(this.h / 100) * Math.floor(this.w / 100);
+        callback = cb;
+
         for (var y = 0; y < this.h; y += 100) {
             for (var x = 0; x < this.w; x += 100) {
                 var image = new Image();
