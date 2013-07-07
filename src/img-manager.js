@@ -3,6 +3,7 @@
     ImgManager = function() {
         this.w = $(window).width();
         this.h = $(window).height();
+        this.stretch = true;
 
         this.ctx = $('#grid')[0].getContext('2d');
     };
@@ -18,12 +19,11 @@
     };
 
     ImgManager.prototype.drawGrid = function () {
+        var spacing = 20;
+
         //Configure canvas
         $('#grid').width(this.w).height(this.h);
         $('#grid').attr('width', this.w).attr('height', this.h);
-
-        var spacing = 20; // + ((this.w % 100 ) / Math.floor(this.w / 20));
-        console.log('Spacing is: ', spacing);
 
         for (var i = 0; i < this.h; i += spacing) {
             this.drawLine(0, i, this.w, i, i % 100 ? 0.7 : 1);
@@ -34,7 +34,7 @@
         }
     };
 
-    ImgManager.prototype.load = function (url, effect) {
+    ImgManager.prototype.load = function (url, effect, callback) {
         var effectManager;
 
         if (effect == 'grid') {
@@ -44,30 +44,56 @@
         }
 
         effectManager.load(url, function() {
+            callback();
             console.log('Image loaded.');
         });
     };
 
-    ImgManager.prototype.setPosition = function (img) {
+    ImgManager.prototype.setStretch = function (mode) {
+        this.stretch = mode;
+    };
+
+    ImgManager.prototype.setPosition = function (img, animate) {
         var screenAR = this.w / this.h,
-            imgAR = $(img).width() / $(img).height();
+            imgAR = $(img).width() / $(img).height(),
+            left = 0,
+            top = 0,
+            width = this.w,
+            height = this.h;
+
+        console.log(imgAR);
 
         if (imgAR > screenAR) {
-            console.log('Horizontal bars');
-
-            $(img).width(this.w);
-            $(img).height(this.w$ / imgAR);
-
-            $(img).css({
-                'top': (this.h - $(img).height()) / 2 + 'px'});
+            if (this.stretch) {
+                width = this.h * imgAR;
+                left = (this.w - width) / 2;
+            } else {
+                height = this.w / imgAR;
+                top = (this.h - height) / 2;
+            }
         } else {
-            console.log('Vertical bars');
+            if (this.stretch) {
+                height = this.w / imgAR;
+                top = (this.h - height) / 2;
+            } else {
+                width = this.h * imgAR;
+                left = (this.w - width) / 2;
+            }
+        }
 
-            $(img).height(this.h);
-            $(img).width(this.h * imgAR);
+        var newValues = {
+            'width': width + 'px',
+            'height': height + 'px',
+            'left': left + 'px',
+            'top': top + 'px'
+        };
 
-            $(img).css({
-                'left': (this.w - $(img).width()) / 2 + 'px'});
+        if (animate) {
+            $(img).animate(newValues, {
+                duration: 1000
+            });
+        } else {
+            $(img).css(newValues);
         }
     };
 

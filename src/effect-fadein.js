@@ -4,9 +4,8 @@
 
     drawImage = function() {
         document.body.appendChild(img);
-        engine.setPosition(img, true);
-        $(img).show();
-        callback();
+        engine.setPosition(img, false);
+        $(img).fadeIn(2000, callback);
     };
 
     FadeInEffect = function() {
@@ -20,6 +19,7 @@
         img.style.display = 'none';
         img.style.top = '0px';
         img.style.left = '0px';
+        img.id = 'currentImage';
 
         img.onload = drawImage;
         img.src = url;

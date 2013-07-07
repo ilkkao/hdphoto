@@ -1,9 +1,23 @@
 (function () {
     var delay = 0,
         tiles = -1,
-        callback = null;
+        callback = null,
+        first = true;
 
     function drawPieces(img, x, y) {
+        img.style.clip = 'rect(' + y + 'px ' + (x + 100) + 'px ' +
+            (y + 100) + 'px ' + x + 'px)';
+        img.style.position = 'absolute';
+        img.style.top = '0px';
+        img.style.left = '0px';
+        img.style.display = 'none';
+        if (first) {
+            img.id = 'currentImage';
+            first = false;
+        } else {
+            img.className = 'gridEffectTmp';
+        }
+
         setTimeout(function() {
             var dir = Math.floor(Math.random() * 4);
             var dx = 0,
@@ -22,7 +36,7 @@
             }
 
             document.body.appendChild(img);
-            engine.setPosition(img, true);
+            engine.setPosition(img, false);
 
             $(img).css({
                 'left': '-=' + dx + 'px',
@@ -36,11 +50,12 @@
                 'top': '+=' + dy + 'px'
             }, {
                 duration: 2000,
-                easing: 'swing',
                 complete: function() {
-                    console.log(tiles);
-
                     if (--tiles == 0) {
+                        $('.gridEffectTmp').remove();
+                        $('#currentImage').css({
+                            'clip': 'auto'
+                        });
                         callback();
                     }
                 }
@@ -56,18 +71,12 @@
     };
 
     GridEffect.prototype.load = function (url, cb) {
-        tiles = Math.floor(this.h / 100) * Math.floor(this.w / 100);
+        tiles = (Math.floor(this.h / 100) + 1) * (Math.floor(this.w / 100) + 1);
         callback = cb;
 
         for (var y = 0; y < this.h; y += 100) {
             for (var x = 0; x < this.w; x += 100) {
                 var image = new Image();
-                image.style.clip = 'rect(' + y + 'px ' + (x + 100) + 'px ' +
-                    (y + 100) + 'px ' + x + 'px)';
-                image.style.position = 'absolute';
-                image.style.top = '0px';
-                image.style.left = '0px';
-                image.style.display = 'none';
 
                 image.onload = (function(a,b,c) {
                     return function() {
