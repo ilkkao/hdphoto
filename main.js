@@ -1,14 +1,59 @@
 
 var engine;
 
+var imageData = {
+//    [
+//        { id: 'xdvgf',
+//          url: 'vcf.com/foo',
+//          desc: 'Yosemite ....',
+//          date: '3425'
+//        }
+//    ]
+};
+
 $(document).ready(function () {
     "use strict";
 
     engine = new ImgManager();
     engine.drawGrid();
 
-    var loading = false;
-    var stretch = true;
+    var loading = false,
+        stretch = true,
+        fullscreen = false;
+
+    function goFullscreen() {
+        fullscreen = !fullscreen;
+        var element = $('body').get(0);
+
+        if (fullscreen) {
+            if (element.requestFullScreen) {
+                element.requestFullScreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullScreen) {
+                element.webkitRequestFullScreen();
+            }
+
+            //Wrong, because fullscreen can be deniend
+            $('#menuF').css({
+                'backgroundColor': '#336699'});
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+
+            $('#menuF').css({
+                'backgroundColor': 'black'});
+        }
+    }
+
+    $('#menuF').click(function() {
+        goFullscreen();
+    });
 
     $('#menu1').click(function() {
         stretch = !stretch;
