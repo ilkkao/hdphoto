@@ -1,4 +1,4 @@
 Full-screen image viewer
 ========================
 
-Work in early stages.
+Work in progress.
